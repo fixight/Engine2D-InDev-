@@ -1,7 +1,8 @@
 ﻿#pragma once
+#include "Objects/Object.h"
 
-class MovementComponent
+class MovementComponent : public Object 
 {
-public:
+
     
 };

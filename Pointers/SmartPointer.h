@@ -51,13 +51,18 @@ public:
         return Pointer;
     }
 
+    int* GetRefCount() const {return RefCount;}
+
+    int* GetWeakRefCount() const {return WeakRefCount;}
+
 private:
     T* Pointer;      
-    int* RefCount;   
+    int* RefCount;
+    int* WeakRefCount;
 
     void release() {
         if (RefCount && --(*RefCount) == 0) {
-            delete Pointer;   
+            //delete Pointer;   
             delete RefCount;  
         }
     }
