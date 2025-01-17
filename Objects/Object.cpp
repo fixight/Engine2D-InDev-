@@ -11,12 +11,26 @@ Object::Object()
         std::cout << "Object::Object()" << std::endl;
         Engine::engine->BindTickable(this);
     }
+
+    
         
 
    
+}
+
+void Object::RegisterPropertiesBase()
+{
+    RegisterProperty(CanTick);
 }
 
 void Object::Tick(const float DeltaSeconds)
 {
     
 }
+
+void Object::BeginPlay()
+{
+    
+}
+
+

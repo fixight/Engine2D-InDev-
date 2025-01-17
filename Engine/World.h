@@ -3,14 +3,15 @@
 #include <vector>
 
 
+#include "ChunkManager.h"
 #include "Objects/Actor.h"
 #include "Objects/Object.h"
 #include "Core/Transform.h"
-#include "Objects/Pawn.h"
 #include "Objects/PlayerStart.h"
 #include "Pointers/SmartPointer.h"
 
 
+class Controller;
 class PlayerStart;
 
 
@@ -24,23 +25,30 @@ public:
         return Instance;
     }
 
+    
+
     static World* Instance;
 
     template<typename T>
-    SmartPointer<T> SpawnObject(Transform& InTransform);
+    SmartPointer<T> SpawnObject(const Transform& InTransform);
 
     std::vector<SmartPointer<Actor>> GetAllActors(){return AllActors;}
 
 private:
     World() {}
+
     ~World() {}
+
     World(const World&) = delete;
+
     World& operator=(const World&) = delete;
 
 private:
     std::vector<SmartPointer<Actor>> AllActors;
 
     static std::vector<SmartPointer<PlayerStart>> PlayerStarts;
+
+    static SmartPointer<Controller> LocalController;
 
 
 public:
@@ -52,6 +60,17 @@ public:
 
         return SmartPointer<PlayerStart>(new PlayerStart());
     }
+
+    SmartPointer<Controller> GetLocalController()
+    {
+        return LocalController;
+    }
+
+    void SetLocalController(SmartPointer<Controller> InController)
+    {
+        LocalController = InController;
+    }
+        
 };
 
 
@@ -59,7 +78,7 @@ public:
 
 
 template <typename T>
-SmartPointer<T> World::SpawnObject(Transform& InTransform) {
+SmartPointer<T> World::SpawnObject(const Transform& InTransform) {
     static_assert(std::is_base_of<Actor, T>::value, "T must be derived from Actor");
     
     SmartPointer<T> NewObject = SmartPointer<T>(new T());
@@ -69,8 +88,14 @@ SmartPointer<T> World::SpawnObject(Transform& InTransform) {
     NewActor->SetOwner(this);
 
     AllActors.push_back(SmartPointer<Actor>(NewObject.Get()));
+
+    ChunkManager::GetChunkManager()->AddObjectToChunk(NewActor);
+
+    std::cout << "Object spawned: " << NewActor << " at position (" 
+              << InTransform.Position.X << ", " << InTransform.Position.Y << ")" << std::endl;
     
     return NewObject;
+    
 }
 
 

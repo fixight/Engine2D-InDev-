@@ -10,6 +10,7 @@ public:
     Camera()
     {
         IsVisible = false;
+        bHasCollision = false;
     }
 
 

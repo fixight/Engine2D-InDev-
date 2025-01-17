@@ -31,7 +31,7 @@ void Renderer::Render(sf::RenderWindow* Window , Camera* Camera)
         
         Vector2D ScreenPosition = Camera->ConvertWorldToScreen(WorldPosition, CameraPosition, ScreenWidth, ScreenHeight);
 
-        std::cout << "Rendering object at: " << ScreenPosition.X << ", " << ScreenPosition.Y << std::endl;
+        
 
         
 
